@@ -6,11 +6,15 @@
 
 ---
 
+## Abstract
+
+This research paper investigates how non-linear search performance signals (impression volume, average ranking position, and click-through rates) can be modeled to predict page performance and prioritize high-leverage content refresh candidates. Using a public-safe dataset of 30,000 anonymized search records, we built and evaluated machine learning models (`RandomForestRegressor` and `HistGradientBoostingRegressor`) against a rank-based heuristic baseline. Our Random Forest model reduced prediction error (MAE) by 23.2% compared to the baseline, retaining a strong performance profile even under a strict 5-fold `GroupKFold` validation split (+5.6% MAE variance). Finally, predictions were operationalized into a human-reviewed Content Action Playbook that successfully flagged 7,537 high-priority metadata refresh candidates while enforcing strict YMYL safety guardrails.
+
+---
+
 ## 1. Executive Summary
 
-This capstone project investigates how non-linear search performance signals (impression volume, average ranking position, and click-through rates) can be modeled to predict page performance and prioritize high-leverage content refresh candidates. 
-
-Using a dataset of 30,000 anonymized page records, we established a heuristic baseline score and built machine learning models (`RandomForestRegressor` and `HistGradientBoostingRegressor`) to predict traffic potential. To ensure production readiness, we conducted a rigorous validation audit using `GroupKFold` splits and synthesized the model outputs into an operational **Content Action Playbook**.
+This capstone project models non-linear search performance signals to prioritize content refresh candidates. Using 30,000 anonymized page records, we established a heuristic baseline score and built machine learning models (`RandomForestRegressor` and `HistGradientBoostingRegressor`) to predict traffic potential. To ensure production readiness, we conducted a rigorous validation audit using `GroupKFold` splits and synthesized the model outputs into an operational **Content Action Playbook**.
 
 * **Baseline Performance:** MAE = 95.42
 * **ML Model Performance (Random Forest):** MAE = 73.28 (23.2% improvement over baseline)
@@ -30,6 +34,10 @@ Search rankings exhibit severe non-linear relationships—for example, dropping 
 ---
 
 ## 3. Data & Feature Leakage Prevention
+
+### Data & Scope
+* **Release:** Anonymized 30,000-row production snapshot (`content_refresh_anonymized.csv`).
+* **Public Safety:** All URLs, domain names, query terms, and client identifiers were completely stripped or anonymized into hash identifiers to ensure privacy compliance.
 
 ### Feature Matrix Design
 The feature set relies strictly on pre-observation performance indicators:
@@ -89,3 +97,14 @@ The model predictions were translated into an operational queue of 30,000 pages:
 * **Retraining Triggers:** Model recalibration is triggered if average CTR across position tiers drifts by $>15\%$ over a 30-day window or following major Google core algorithm updates.
 
 ---
+
+## 7. Reproducibility
+
+* **GitHub Repository:** [ggirlrottingg/ml-internship-starter](https://github.com/ggirlrottingg/ml-internship-starter)
+* **Execution Notebooks:** All notebooks (`w01` through `w07`) are fully runnable top-to-bottom with seed initializations set to `42`.
+
+---
+
+## Acknowledgments & Data Credit
+
+Built on the [FlyRank](https://flyrank.ai) ML Internship dataset.
